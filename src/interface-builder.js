@@ -1,7 +1,14 @@
+let subRequest = [];
+let subResponse = [];
+let jsonCode;
+let path;
+let indent;
+let semicolonEnd;
+
 // 添加缩进
-const addIndent = (ident) => {
+const addIndent = (identNum) => {
   let identStr = "";
-  new Array(ident).fill(1).forEach(() => {
+  new Array(identNum).fill(1).forEach(() => {
     identStr += " ";
   });
   return identStr;
@@ -15,7 +22,7 @@ const addComment = (CommentStr) =>
 
 const addLeftBracket = ` {${breakLine}`;
 
-const addRightBracket = `};${breakLine}${breakLine}`;
+const addRightBracket = `}${semicolonEnd ? ";" : ""}${breakLine}${breakLine}`;
 
 const firstCharUpperCase = (v) => v.charAt(0).toLocaleUpperCase() + v.slice(1);
 
@@ -44,12 +51,6 @@ const typeMap = {
   boolean: "boolean",
   number: "number",
 };
-
-let subRequest = [];
-let subResponse = [];
-let jsonCode;
-let path;
-let indent;
 
 const singleItem = (item, interfaceType, requiredData) => {
   let type = typeMap[item.type];
@@ -118,6 +119,7 @@ const interfaceBuilder = (code, config) => {
       return { interfaceCode: resultCode, isError: false };
     }
     indent = config.indent;
+    semicolonEnd = !!config.semicolonEnd;
 
     // 转换请求interface
     const target = jsonCode.paths[path].get || jsonCode.paths[path].post;

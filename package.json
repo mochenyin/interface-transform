@@ -1,8 +1,8 @@
 {
-	"name": "interface-transform",
-	"displayName": "interface-transform",
+	"name": "interface-transform-mcy",
+	"displayName": "interface-transform-mcy",
 	"description": "transform api json into ts interface",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"engines": {
 		"vscode": "^1.69.0"
 	},
@@ -13,6 +13,10 @@
 		"onCommand:interface-transform.helloWorld"
 	],
 	"publisher": "mochenyin",
+	"repository": {
+        "type": "git",
+        "url": "https://github.com/mochenyin/interface-transform.git"
+    },
 	"main": "./src/index.js",
 	"contributes": {
 		"commands": [
@@ -21,14 +25,22 @@
 				"title": "interface-transform: start"
 			},
 			{
-				"command": "interface-transform.transform",
-				"title": "interface-transform: transform"
+				"command": "interface-transform.transformSelection",
+				"title": "interface-transform: transform Selection"
+			},
+			{
+				"command": "interface-transform.transformClipboard",
+				"title": "interface-transform: transform Clipboard"
 			}
 		],
 		"menus": {
 			"editor/context": [{
 				"when": "editorHasSelection",
-				"command": "interface-transform.transform",
+				"command": "interface-transform.transformSelection",
+				"group": "navigation" 
+			},{
+				"when": "editorTextFocus",
+				"command": "interface-transform.transformClipboard",
 				"group": "navigation" 
 			}]
 		},
@@ -39,6 +51,11 @@
 					"type": "number",
 					"default": 4,
 					"description": "缩进"
+				},
+				"InterfaceTransform.semicolonEnd": {
+					"type": "boolean",
+					"default": false,
+					"description": "分号结尾"
 				}
 			}
 		}

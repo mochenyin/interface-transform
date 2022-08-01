@@ -1,7 +1,7 @@
 const vscode = require('vscode');
 const interfaceBuilder = require("./interface-builder");
 
-module.exports = vscode.commands.registerCommand('interface-transform.transform', function () {
+module.exports = vscode.commands.registerCommand('interface-transform.transformSelection', function () {
     // vscode.window.showInputBox({
     //     password: false, // 输入内容是否是密码
     //     ignoreFocusOut: true, // 点击其它地方输入框是否消失，true不消失，默认为false
@@ -12,6 +12,7 @@ module.exports = vscode.commands.registerCommand('interface-transform.transform'
     //     },
     // });
     const indent = vscode.workspace.getConfiguration().get("InterfaceTransform.indent");
+    const semicolonEnd = vscode.workspace.getConfiguration().get("InterfaceTransform.semicolonEnd");
     // console.log("indent", indent);
 
     // 获取选中的文本
@@ -21,6 +22,7 @@ module.exports = vscode.commands.registerCommand('interface-transform.transform'
     // 将选中文本根据用户配置转换成 ts interface
     const {interfaceCode, isError} = interfaceBuilder(currentSelect, {
         indent,
+        semicolonEnd,
     });
 
     // console.log("interfaceCode", interfaceCode);
