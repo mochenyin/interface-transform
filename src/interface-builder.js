@@ -58,8 +58,11 @@ const singleItem = (item, interfaceType, requiredData) => {
   let required = true;
   if (!type) {
     console.log("item", item);
-    type = item.refType || item.items.originalRef;
+    type = item.refType || (item.items ? item.items.originalRef : "");
     interfaceName = type;
+    if (!interfaceName) {
+      return "";
+    }
     const target = interfaceType === "request" ? subRequest : subResponse;
     // if ((/[\u4e00-\u9fa5]/g).test(type)) {
     //     interfaceName = firstCharUpperCase(interfaceType) + target.length;
@@ -82,7 +85,7 @@ const getCodeFromDefinitions = (
   interfaceType,
   interfaceName
 ) => {
-  const responsesThirdOriginalRef = jsonCode.definitions[keyName];
+  const responsesThirdOriginalRef = jsonCode.definitions[keyName] === undefined ? {} : jsonCode.definitions[keyName];
   const requiredData = responsesThirdOriginalRef.required;
   console.log("keyName", keyName);
   const target = responsesThirdOriginalRef.properties;
