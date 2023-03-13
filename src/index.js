@@ -1,15 +1,13 @@
-const vscode = require('vscode');
 const transform = require("./transform.js");
 const message = require("./message.js");
 const transformC = require("./transform-clipboard.js");
+const mockClipboardData = require("./mock-clipboard-data.js");
 
-/**
- * @param {vscode.ExtensionContext} context
- */
 function activate(context) {
 	context.subscriptions.push(message);
     context.subscriptions.push(transform);
 	context.subscriptions.push(transformC);
+	context.subscriptions.push(mockClipboardData);
 }
 
 function deactivate() {}

@@ -10,8 +10,9 @@ your extension
 
 ### 使用步骤
 1.启动:ctrl+shift+P或者cmd+shift+P,选择interface-transform: start    
-2.选中Swagger文档中接口的模型json,右键选择interface-transform: transform Selection，转换选中文本   
-3.右键选择interface-transform: transform Clipboard，转换剪贴板文本   
+2.复制Swagger文档中接口的JSON Schema
+3.右键选择interface-transform: transform Selection，转换选中文本(文本需符合JSON Schema格式)    
+4.右键选择interface-transform: transform Clipboard，转换剪贴板文本(文本需符合JSON Schema格式)   
 
 
 ## Extension Settings
