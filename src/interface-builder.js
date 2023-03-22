@@ -67,6 +67,7 @@ const singleItem = (item, interfaceType, requiredData) => {
     // if ((/[\u4e00-\u9fa5]/g).test(type)) {
     //     interfaceName = firstCharUpperCase(interfaceType) + target.length;
     // }
+    interfaceName = interfaceName.replaceAll("«", "").replaceAll("»", "");
     const code = createSubInterface(type, interfaceType, interfaceName);
     target.push(code);
   }

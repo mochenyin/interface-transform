@@ -34,7 +34,6 @@ const firstCharUpperCase = (v) => v.charAt(0).toLocaleUpperCase() + v.slice(1);
 const createInterfaceName = (name) => {
   let interfaceName = "";
   const nameList = name.split("-");
-  console.log("nameList", nameList);
   nameList.forEach((v) => (interfaceName += firstCharUpperCase(v)));
   return interfaceName;
 };
@@ -59,7 +58,6 @@ const singleItem = async (item, interfaceType) => {
   let type = typeMap[item.type];
   let interfaceName = type;
   if (!type) {
-    console.log("item", item);
     type = item.refType || (item.items ? item.items.originalRef : "");
     interfaceName = type;
     if (!interfaceName) {
@@ -69,6 +67,7 @@ const singleItem = async (item, interfaceType) => {
     // if ((/[\u4e00-\u9fa5]/g).test(type)) {
     //     interfaceName = firstCharUpperCase(interfaceType) + target.length;
     // }
+    interfaceName = interfaceName.replaceAll("«", "").replaceAll("»", "");
     const code = await createSubInterface(type, interfaceType, interfaceName);
     target.push(code);
   }
@@ -76,7 +75,6 @@ const singleItem = async (item, interfaceType) => {
     return `${addIndent(indent)}${item.name}: [${interfaceName}],${breakLine}`;
   }
   let mockValue;
-  console.log("type", item.name, type);
   if (typeMap[item.type] === undefined) {
     mockValue = interfaceName;
   } else {
@@ -95,14 +93,12 @@ const getCodeFromDefinitions = async (
   interfaceName
 ) => {
   const responsesThirdOriginalRef = jsonCode.definitions[keyName] === undefined ? {} : jsonCode.definitions[keyName];
-  console.log("keyName", keyName);
   const target = responsesThirdOriginalRef.properties;
   const responsesArray = Object.keys(target || {});
   if (responsesArray.length) {
     resultCode += `const ${
       interfaceName || getName(path, interfaceType)
     } =${addLeftBracket}`;
-    console.log("responsesArray", responsesArray);
     for (let item of responsesArray) {
       target[item].name = item;
       resultCode += await singleItem(target[item], interfaceType);
@@ -125,7 +121,6 @@ const interfaceCreater = async (code, config) => {
     jsonCode = JSON.parse(code);
     let resultCode = "";
     path = Object.keys(jsonCode.paths || {})[0];
-    console.log("path", path);
     if (!path) {
       return { interfaceCode: resultCode, isError: false };
     }
@@ -134,7 +129,6 @@ const interfaceCreater = async (code, config) => {
     // 转换请求interface
     const target = jsonCode.paths[path].get || jsonCode.paths[path].post;
     const parameters = target.parameters;
-    console.log("parameters", parameters);
     if (parameters && parameters.length) {
       const rArray = [];
       for (let item of parameters) {

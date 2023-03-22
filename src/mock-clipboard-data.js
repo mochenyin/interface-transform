@@ -20,8 +20,6 @@ module.exports = vscode.commands.registerCommand('interface-transform.mockClipbo
             semicolonEnd,
         });
     
-        console.log("interfaceCode", interfaceCode);
-        
         if (isError === true) {
             vscode.window.showErrorMessage('InterfaceTransform生成mock数据失败!');
             return;
