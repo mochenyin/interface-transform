@@ -2,7 +2,7 @@
 	"name": "interface-transform-mcy",
 	"displayName": "interface-transform-mcy",
 	"description": "transform api json into ts interface",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"engines": {
 		"vscode": "^1.69.0"
 	},
@@ -10,7 +10,7 @@
 		"Other"
 	],
 	"activationEvents": [
-
+		"onCommand:interface-transform.start"
 	],
 	"publisher": "mochenyin",
 	"repository": {
@@ -31,10 +31,6 @@
 			{
 				"command": "interface-transform.transformClipboard",
 				"title": "interface-transform: transform Clipboard"
-			},
-			{
-				"command": "interface-transform.mockClipboardData",
-				"title": "interface-transform: mock clipboard data"
 			}
 		],
 		"menus": {
@@ -47,11 +43,6 @@
 				{
 					"when": "editorTextFocus",
 					"command": "interface-transform.transformClipboard",
-					"group": "navigation"
-				},
-				{
-					"when": "editorTextFocus",
-					"command": "interface-transform.mockClipboardData",
 					"group": "navigation"
 				}
 			]
@@ -85,9 +76,7 @@
 		"@vscode/test-electron": "^2.1.5",
 		"eslint": "^8.18.0",
 		"glob": "^8.0.3",
-		"json-schema-faker": "^0.5.0-rcv.46",
 		"mocha": "^10.0.0",
-		"typescript": "^4.7.4",
-		"jsonschema": "^1.4.1"
+		"typescript": "^4.7.4"
 	}
 }
