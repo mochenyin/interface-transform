@@ -2,7 +2,7 @@
 	"name": "interface-transform-mcy",
 	"displayName": "interface-transform-mcy",
 	"description": "transform api json into ts interface",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"engines": {
 		"vscode": "^1.69.0"
 	},
@@ -10,7 +10,7 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:interface-transform.start"
+
 	],
 	"publisher": "mochenyin",
 	"repository": {

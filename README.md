@@ -6,7 +6,7 @@ your extension
 
 ## Features
 
-根据Swagger生成的接口文档，转换成前端typescript里的interface
+根据Swagger生成的接口文档，转换成typescript里的interface
 
 ### 使用步骤
 1.启动:ctrl+shift+P或者cmd+shift+P,选择interface-transform: start    
