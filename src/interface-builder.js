@@ -52,13 +52,39 @@ const typeMap = {
   number: "number",
 };
 
+let defaultGroup = "";
+
+const getRefName = (target) => {
+  if (target.originalRef) {
+    return target.originalRef
+  } else if (target.$ref){
+    const targetArray = target.$ref.split("/");
+    if (defaultGroup === "") {
+      defaultGroup = targetArray[1];
+    }
+    return targetArray[targetArray.length - 1];
+  }
+  return ""
+}
+
+const getGroup = (target) => {
+  if (target.definitions) {
+    return target.definitions
+  } else if (target.components){
+    return target.components;
+  } else if (defaultGroup) {
+    return target[defaultGroup];
+  }
+  return {};
+}
+
 const singleItem = (item, interfaceType, requiredData) => {
   let type = typeMap[item.type];
   let interfaceName = type;
   let required = true;
   if (!type) {
     console.log("item", item);
-    type = item.refType || (item.items ? item.items.originalRef : "");
+    type = item.refType || (item.items ? getRefName(item.items) : "");
     interfaceName = type;
     if (!interfaceName) {
       return "";
@@ -86,7 +112,8 @@ const getCodeFromDefinitions = (
   interfaceType,
   interfaceName
 ) => {
-  const responsesThirdOriginalRef = jsonCode.definitions[keyName] === undefined ? {} : jsonCode.definitions[keyName];
+  const targetGroup = getGroup(jsonCode);
+  const responsesThirdOriginalRef = targetGroup[keyName] === undefined ? {} : targetGroup[keyName];
   const requiredData = responsesThirdOriginalRef.required;
   console.log("keyName", keyName);
   const target = responsesThirdOriginalRef.properties;
@@ -133,7 +160,7 @@ const interfaceBuilder = (code, config) => {
       const rArray = [];
       parameters.forEach((item) => {
         if (item.schema !== undefined) {
-          const keyName = item.schema.originalRef;
+          const keyName = getRefName(item.schema);
           if (keyName) {
             resultCode = getCodeFromDefinitions(resultCode, keyName, "request");
           }
@@ -152,22 +179,25 @@ const interfaceBuilder = (code, config) => {
     }
 
     // 转换响应interface
-    if (
-      target.responses["200"].schema &&
-      target.responses["200"].schema.originalRef
-    ) {
-      const responsesFirstOriginalRef =
-        target.responses["200"].schema.originalRef;
-      let responsesSecondOriginalRef =
-        jsonCode.definitions[responsesFirstOriginalRef].properties.data
-          .originalRef;
+    const getResponseTarget = (cTarget) => {
+      if (cTarget.schema) {
+        return cTarget;
+      } else if (cTarget.content) {
+        return cTarget.content["application/json"];
+      }
+      return undefined;
+    }
+
+    const responseTarget = getResponseTarget(target.responses["200"]);
+    if (responseTarget) {
+      const responsesFirstOriginalRef = getRefName(responseTarget.schema);
+      const targetGroup = getGroup(jsonCode);
+      let responsesSecondOriginalRef = getRefName(targetGroup[responsesFirstOriginalRef].properties.data);
       if (
-        jsonCode.definitions[responsesFirstOriginalRef].properties.data.type ===
+        targetGroup[responsesFirstOriginalRef].properties.data.type ===
         "array"
       ) {
-        responsesSecondOriginalRef =
-          jsonCode.definitions[responsesFirstOriginalRef].properties.data.items
-            .originalRef;
+        responsesSecondOriginalRef = getRefName(targetGroup[responsesFirstOriginalRef].properties.data.items);
       }
       resultCode = getCodeFromDefinitions(
         resultCode,
