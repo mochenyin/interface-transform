@@ -154,7 +154,7 @@ const interfaceBuilder = (code, config) => {
 
     // 转换请求interface
     const target = jsonCode.paths[path].get || jsonCode.paths[path].post;
-    const parameters = target.parameters;
+    const parameters = target.parameters || [target.requestBody.content["application/json"]];
     console.log("parameters", parameters);
     if (parameters && parameters.length) {
       const rArray = [];
